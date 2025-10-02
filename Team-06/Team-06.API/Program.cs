@@ -15,18 +15,17 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Register application services
 builder.Services.AddScoped<IProductService, ProductService>();
-
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddScoped<IToolService, ToolService>();
 
 // Add Swagger/OpenAPI services
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "Team_06 Business Management API",
         Version = "v1",
-        Description = "A comprehensive business management API with HR and Sales Analytics built with Team_06 framework",
+        Description = "A comprehensive business management API with Tools Management and more",
         Contact = new OpenApiContact
         {
             Name = "Aventude Team",
@@ -57,17 +56,17 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-app.MapOpenApi();
-app.UseDeveloperExceptionPage();
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
 
-// Enable Swagger UI
+// Always enable Swagger for now
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Team_06 Business Management API v1");
-    c.RoutePrefix = "swagger"; // Swagger UI will be available at /swagger
+    c.RoutePrefix = string.Empty; // Swagger UI will be available at the root URL
     c.DocumentTitle = "Team_06 Business Management API";
     c.DisplayRequestDuration();
     c.EnableDeepLinking();
@@ -75,7 +74,6 @@ app.UseSwaggerUI(c =>
     c.ShowExtensions();
     c.EnableValidator();
 });
-//}
 
 app.UseHttpsRedirection();
 
@@ -84,6 +82,9 @@ app.UseCors("AllowAll");
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Add a default route that redirects to Swagger
+app.MapGet("/", () => Results.Redirect("/swagger"));
 
 app.Run();
 

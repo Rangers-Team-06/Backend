@@ -28,9 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Team_06.API\Team_06.API.csproj" />
-    <ProjectReference Include="..\Team_06.Data\Team_06.Data.csproj" />
-    <ProjectReference Include="..\Team_06.Services\Team_06.Services.csproj" />
+    <ProjectReference Include="..\Team-06.API\Team-06.API.csproj" />
+    <ProjectReference Include="..\Team-06.Data\Team-06.Data.csproj" />
+    <ProjectReference Include="..\Team-06.Services\Team-06.Services.csproj" />
+    <ProjectReference Include="..\Team-06.DTOs\Team-06.DTOs.csproj" />
   </ItemGroup>
 
 </Project>

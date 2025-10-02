@@ -9,8 +9,9 @@ namespace Team_06.Data
         {
         }
 
-        // DbSets for Product entities only
+        // DbSets for entities
         public DbSet<Product> Products { get; set; }
+        public DbSet<Tool> Tools { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -18,6 +19,7 @@ namespace Team_06.Data
 
             // Configure entity relationships and constraints
             ConfigureProduct(modelBuilder);
+            ConfigureTool(modelBuilder);
         }
 
         private static void ConfigureProduct(ModelBuilder modelBuilder)
@@ -33,5 +35,29 @@ namespace Team_06.Data
             });
         }
 
+        private static void ConfigureTool(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Tool>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasMaxLength(36);
+                entity.Property(e => e.FriendlyName).HasMaxLength(255).IsRequired();
+                entity.Property(e => e.Make).HasMaxLength(100);
+                entity.Property(e => e.Model).HasMaxLength(100);
+                entity.Property(e => e.Category).HasMaxLength(100);
+                entity.Property(e => e.Supplier).HasMaxLength(100);
+                entity.Property(e => e.Currency).HasMaxLength(3);
+                entity.Property(e => e.UnitCost).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.QRData).IsRequired();
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("GETUTCDATE()");
+                
+                // Indexes for better query performance
+                entity.HasIndex(e => e.FriendlyName);
+                entity.HasIndex(e => e.Category);
+                entity.HasIndex(e => e.Make);
+                entity.HasIndex(e => e.Model);
+            });
+        }
     }
 }
